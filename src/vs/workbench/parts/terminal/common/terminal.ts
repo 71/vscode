@@ -307,6 +307,8 @@ export interface ITerminalInstance {
 
 	onFocus: Event<ITerminalInstance>;
 
+	onMouseMove: Event<ITerminalInstance>;
+
 	/**
 	 * Attach a listener to the raw data stream coming from the pty, including ANSI escape
 	 * sequences.

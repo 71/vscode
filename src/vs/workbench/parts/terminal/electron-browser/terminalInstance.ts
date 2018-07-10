@@ -111,6 +111,8 @@ export class TerminalInstance implements ITerminalInstance {
 	public get onDimensionsChanged(): Event<void> { return this._onDimensionsChanged.event; }
 	private readonly _onFocus: Emitter<ITerminalInstance> = new Emitter<ITerminalInstance>();
 	public get onFocus(): Event<ITerminalInstance> { return this._onFocus.event; }
+	private readonly _onMouseMove: Emitter<ITerminalInstance> = new Emitter<ITerminalInstance>();
+	public get onMouseMove(): Event<ITerminalInstance> { return this._onMouseMove.event; }
 
 	public constructor(
 		private readonly _terminalFocusContextKey: IContextKey<boolean>,
@@ -405,6 +407,10 @@ export class TerminalInstance implements ITerminalInstance {
 				// Wait until keyup has propagated through the DOM before evaluating
 				// the new selection state.
 				setTimeout(() => this._refreshSelectionContextKey(), 0);
+			}));
+
+			this._disposables.push(dom.addDisposableListener(this._xterm.element, 'mousemove', _ => {
+				this._onMouseMove.fire(this);
 			}));
 
 			const xtermHelper: HTMLElement = <HTMLElement>this._xterm.element.querySelector('.xterm-helpers');
